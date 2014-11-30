@@ -1,12 +1,17 @@
+#!/usr/bin/env ruby
+
+$: << File.join(File.dirname(__FILE__), '..', 'lib')
+
 require 'net/socket'
 
 include Net::Socket
 
-# Ruby port of https://github.com/duckinator/ooch/blob/master/ooch.ooc
-
+async  = ARGV[0] == '--async'
 socket = TCP::Server.new("0.0.0.0", 8000)
 
-socket.each_request(true) do |conn|
+puts "Server listening #{async ? 'a' : ''}synchronously at 0.0.0.0:8000."
+
+socket.each_request(async) do |conn|
   # Start headers.
   conn.write "HTTP/1.0 200 OK\r\n"
   conn.write "Server: ooc httpd\r\n"
