@@ -33,10 +33,6 @@ class DumpServer < Net::Socket::TCP::ProtocolServer
     end
 
     # Body (everything that is left).
-    # FIXME: If Content-Length is not specified and no EOF is received
-    # (technically making the connection a stream), it will blow up
-    # because @headers['Content-Length'] is nil, and nil.to_i makes
-    # Ruby angry.
     state(:body, ->(buff) {buff.length == @headers['Content-Length'].to_i}) do |conn, body|
       # Start headers
       conn.write "HTTP/1.0 200 OK\r\n"
