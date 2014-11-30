@@ -7,20 +7,18 @@ module Net::Socket::TCP
       each_request(async, &@@protocol.handler)
     end
 
-    class Protocol < Struct.new(:states, :initial_state)
-      class Request < Struct.new(:socket, :states)
-        def initialize(socket, states, initial_state)
-          super(socket, states)
+    class Protocol < Struct.new(:states, :triggers, :initial_state)
+      class Request < Struct.new(:socket, :states, :triggers)
+        def initialize(socket, states, triggers, initial_state)
+          super(socket, states, triggers)
 
           @current_state = initial_state
         end
 
         def run_next
-          separator, block = states[@current_state]
-
           buff = ''
 
-          until separator === buff
+          until triggers[@current_state] === buff
             # What the fuck?
             begin
               buff += socket.read_nonblock(1)
@@ -32,7 +30,7 @@ module Net::Socket::TCP
             end
           end
 
-          @current_state = block.call(socket, buff)
+          @current_state = states[@current_state].call(socket, buff)
         end
 
         def done?
@@ -41,7 +39,7 @@ module Net::Socket::TCP
       end
 
       def handle(socket)
-        request = Request.new(socket, states, initial_state)
+        request = Request.new(socket, states, triggers, initial_state)
 
         request.run_next until request.done?
       end
@@ -57,6 +55,9 @@ module Net::Socket::TCP
       end
 
       def initialize(&block)
+        @states   = {}
+        @triggers = {}
+
         instance_exec(&block)
         @current_state = @initial_state
       end
@@ -65,15 +66,18 @@ module Net::Socket::TCP
         @initial_state = name
       end
 
-      def state(name, regexp = nil, separator, &block)
-        separator = Regexp.compile(Regexp.escape(separator)) if separator.is_a?(String)
+      def ready(hsh)
+        hsh.each do |k, v|
+          @triggers[k] = v
+        end
+      end
 
-        @states ||= {}
-        @states[name] = [separator, block]
+      def state(name, &block)
+        @states[name] = block
       end
 
       def build
-        Protocol.new(@states, @initial_state)
+        Protocol.new(@states, @triggers, @initial_state)
       end
     end
 
