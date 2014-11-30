@@ -25,16 +25,10 @@ module Net::Socket::TCP
             begin
               buff += socket.read_nonblock(1)
             rescue IO::WaitReadable
-              # ????
-              # This feels very, very wrong.
-              # You know, on top of how wrong the whole begin/rescue
-              # bullshit felt to start with.
-              break if separator == :rest
-
               IO.select([socket])
               retry
             rescue EOFError
-              # Do nothing.
+              break
             end
           end
 

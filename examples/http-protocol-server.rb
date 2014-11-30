@@ -33,7 +33,7 @@ class DumpServer < Net::Socket::TCP::ProtocolServer
     end
 
     # Body (everything that is left).
-    state(:body, :rest) do |conn, body|
+    state(:body, ->(buff) {buff.length == @headers['Content-Length'].to_i}) do |conn, body|
       # Start headers
       conn.write "HTTP/1.0 200 OK\r\n"
       conn.write "Server: some trashy Ruby httpd\r\n"
