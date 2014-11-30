@@ -60,3 +60,5 @@ async  = ARGV[0] == '--async'
 puts "Server listening #{async ? 'a' : ''}synchronously at 0.0.0.0:8000."
 
 DumpServer.new('0.0.0.0', 8000).listen(async)
+
+sleep
