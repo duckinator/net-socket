@@ -4,7 +4,8 @@ $: << File.join(File.dirname(__FILE__), '..', 'lib')
 
 require 'net/socket'
 
-class EchoServer < Net::Socket::TCP::ProtocolServer
+# A HTTP server that returns the request, in the body of an HTML document.
+class DumpServer < Net::Socket::TCP::ProtocolServer
   protocol do
     initial_state :request
 
@@ -55,4 +56,4 @@ end
 async  = ARGV[0] == '--async'
 puts "Server listening #{async ? 'a' : ''}synchronously at 0.0.0.0:8000."
 
-EchoServer.new('0.0.0.0', 8000).listen(async)
+DumpServer.new('0.0.0.0', 8000).listen(async)
