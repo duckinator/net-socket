@@ -19,12 +19,10 @@ module Net::Socket::TCP
           buff = ''
 
           until triggers[@current_state] === buff
-            # What the fuck?
+            IO.select([socket])
+
             begin
               buff += socket.read_nonblock(1)
-            rescue IO::WaitReadable
-              IO.select([socket])
-              retry
             rescue EOFError
               break
             end
