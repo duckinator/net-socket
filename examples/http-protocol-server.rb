@@ -11,7 +11,8 @@ class DumpServer < Net::Socket::TCP::ProtocolServer
 
     # Request.
     # [method] [url] HTTP/[version]
-    state(:request, "\r\n") do |_, line|
+    ready request: /\r\n/
+    state :request do |_, line|
       @method, @url, protocol = line.split(' ')
       @version = protocol.split('/').last
 
@@ -20,7 +21,8 @@ class DumpServer < Net::Socket::TCP::ProtocolServer
 
     # Headers.
     # [key]: [value]
-    state(:header, "\r\n") do |_, line|
+    ready header: /\r\n/
+    state :header do |_, line|
       # TODO: Define transitions separately?
       next :body if line.strip.empty?
 
@@ -33,7 +35,8 @@ class DumpServer < Net::Socket::TCP::ProtocolServer
     end
 
     # Body (everything that is left).
-    state(:body, ->(buff) {buff.length == @headers['Content-Length'].to_i}) do |conn, body|
+    ready body: ->(buff) { buff.length == @headers['Content-length'].to_i }
+    state :body do |conn, body|
       # Start headers
       conn.write "HTTP/1.0 200 OK\r\n"
       conn.write "Server: some trashy Ruby httpd\r\n"
