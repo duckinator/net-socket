@@ -4,12 +4,18 @@ require 'socket'
 module Net::Socket::TCP
   class Server < TCPServer
     def each_request(async = false, &block)
-      return each_request_async(&block) if async
-
-      loop { handle_request(accept(), &block) }
+      if async
+        each_request_async(&block)
+      else
+        each_request_sync(&block)
+      end
     end
 
     private
+    def each_request_sync(&block)
+      loop { handle_request(accept(), &block) }
+    end
+
     def each_request_async(&block)
       Thread.new do
         loop do
