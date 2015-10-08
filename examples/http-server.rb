@@ -29,4 +29,4 @@ socket.each_request(async) do |conn|
   conn.write response
 end
 
-sleep
+socket.wait
