@@ -1,7 +1,10 @@
-require 'socket'
+require 'net/http'
+require 'net/ftp'
 
-module Net::Socket
-  ::Socket.constants.each do |name|
-    const_set(name, ::Socket.const_get(name))
-  end
+class Net::HTTP
+  Socket = ::Socket
+end
+
+class Net::FTP
+  Socket = ::Socket
 end
