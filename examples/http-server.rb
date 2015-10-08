@@ -6,7 +6,7 @@ require 'net/socket'
 
 include Net::Socket
 
-async  = ARGV[0] == '--async'
+async  = !!ARGV.delete('--async')
 socket = TCP::Server.new("0.0.0.0", 8000)
 
 puts "Server listening #{async ? 'a' : ''}synchronously at 0.0.0.0:8000."
