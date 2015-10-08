@@ -11,6 +11,13 @@ module Net::Socket::TCP
       end
     end
 
+    def wait
+      IO.select([socket]) until socket.closed?
+    rescue
+      # We don't care about IO.select-related exceptions,
+      # so we just ignore them and return.
+    end
+
     private
     def each_request_sync(&block)
       loop { handle_request(accept(), &block) }
