@@ -1,6 +1,10 @@
 # Net::Socket
 
-TODO: Write a gem description
+A fancy-pants socket API for Ruby.
+
+## Bugs
+
+This is actually a bug with Ruby, not Net::Socket, but if you `require 'net/socket'` between creating a `Net::HTTP` or `Net::FTP` instance, Net::HTTP or Net::FTP may raise an "uninitialized constant" exception. The reason for this is that Net::HTTP and Net::FTP reference `Socket`, which winds up referencing Net::Socket. There is a small hack-ish fix for this in [lib/net/socket/socket-hack.rb](https://gitlab.com/spinny/net-socket/blob/main/lib/net/socket/socket-hack.rb), and I will be submitting a pull request to fix it in Ruby.
 
 ## Installation
 
@@ -20,7 +24,21 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+# Yay echo server!
+
+require 'net/socket'
+include Net::Socket
+
+async = !!ARGV.delete('--async')
+socket = TCP::Server.new('0.0.0.0', 9001)
+
+socket.each_request(async) do |conn|
+  conn.puts conn.read
+end
+
+socket.wait # Wait for the socket to close.
+```
 
 ## Development
 
