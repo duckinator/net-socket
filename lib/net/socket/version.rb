@@ -1,3 +1,5 @@
+require 'net/socket/socket-hack'
+
 module Net
   module Socket
     VERSION = "0.0.1"
