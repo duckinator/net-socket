@@ -19,7 +19,7 @@ socket.each_request(async) do |conn|
   conn.write "HTTP/1.0 200 OK\r\n"
   
   # Start headers.
-  conn.write "Server: Ruby Met::Socket example\r\n"
+  conn.write "Server: Ruby Net::Socket example\r\n"
   conn.write "Content-Type: text/html\r\n"
   conn.write "Content-Length: #{response.length}\r\n"
   conn.write "\r\n"
