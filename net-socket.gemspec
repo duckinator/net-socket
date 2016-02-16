@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Marie Markwell"]
   spec.email         = ["me@marie.so"]
 
-  spec.summary       = %q{A nice wrapper for Ruby's built in socket APIs.}
+  spec.summary       = %q{A better socket API.}
   spec.description   = spec.summary
-  spec.homepage      = "https://gitlab.com/spinny/net-socket"
+  spec.homepage      = "https://github.com/heresy/net-socket"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
