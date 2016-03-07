@@ -6,8 +6,8 @@ require 'net/socket/version'
 Gem::Specification.new do |spec|
   spec.name          = "net-socket"
   spec.version       = Net::Socket::VERSION
-  spec.authors       = ["Marie Markwell"]
-  spec.email         = ["me@marie.so"]
+  spec.authors       = ["Ellen Marie Dash"]
+  spec.email         = ["me@duckie.co"]
 
   spec.summary       = %q{A better socket API.}
   spec.description   = spec.summary
