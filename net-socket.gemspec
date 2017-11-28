@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{A better socket API.}
   spec.description   = spec.summary
-  spec.homepage      = "https://github.com/ruby-heresy/net-socket"
+  spec.homepage      = "https://github.com/duckinator/net-socket"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
